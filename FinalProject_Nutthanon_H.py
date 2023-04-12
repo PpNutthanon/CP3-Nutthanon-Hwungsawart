@@ -51,7 +51,7 @@ main.geometry("350x150")
 main.config(bg="#1DB954")
 
 #Todo: Create and display the title label
-title_label = tk.Label(main, text="File Organizer", font=("Arial", 18), fg="#1DB954", bg="#191414")
+title_label = tk.Label(main, text="File Organizer Program", font=("Arial", 18), fg="#1DB954", bg="#191414")
 title_label.pack(pady=20)
 
 #Todo: Create and display the browse button
