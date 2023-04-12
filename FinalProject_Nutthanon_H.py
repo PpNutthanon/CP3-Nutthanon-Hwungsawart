@@ -12,6 +12,8 @@ file_categories = {
     ".jpeg": "Images",
     ".png": "Images",
     ".pdf": "Documents",
+    ".xlsx": "Excel",
+    ".py": "Python",
 }
 
 #Todo: Function to organize files by moving them into categorized folders
