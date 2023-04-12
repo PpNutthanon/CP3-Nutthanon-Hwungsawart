@@ -7,13 +7,14 @@ from tkinter import ttk
 
 #Todo: Define file categories dictionary
 file_categories = {
-    ".txt": "Text",
-    ".jpg": "Images",
+    ".txt" : "Text",
+    ".jpg" : "Images",
     ".jpeg": "Images",
-    ".png": "Images",
-    ".pdf": "Documents",
+    ".png" : "Images",
+    ".pdf" : "Documents",
     ".xlsx": "Excel",
-    ".py": "Python",
+    ".py"  : "Python",
+    ".doc" : "Microsoft Word",
 }
 
 #Todo: Function to organize files by moving them into categorized folders
