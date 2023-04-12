@@ -39,24 +39,24 @@ def browse_directory():
 
 #Todo: Function to initiate the organization process
 def start_organization():
-    root.update()
+    main.update()
     browse_directory()
 
-root = tk.Tk()
-root.title("File Organizer")
-root.geometry("350x150")
-root.config(bg="#1DB954")
+main = tk.Tk()
+main.title("File Organizer")
+main.geometry("350x150")
+main.config(bg="#1DB954")
 
 #Todo: Create and display the title label
-title_label = tk.Label(root, text="File Organizer", font=("Arial", 18), fg="#1DB954", bg="#191414")
+title_label = tk.Label(main, text="File Organizer", font=("Arial", 18), fg="#1DB954", bg="#191414")
 title_label.pack(pady=20)
 
 #Todo: Create and display the browse button
-browse_button = tk.Button(root, text="Select Directory", command=start_organization, fg="#1DB954", bg="#191414", font=("Arial", 12))
+browse_button = tk.Button(main, text="Select Directory", command=start_organization, fg="#1DB954", bg="#191414", font=("Arial", 12))
 browse_button.pack(pady=10)
 
 #Todo: Create and display the result label
-result_label = tk.Label(root, text="", font=("Arial", 12), fg="#1DB954", bg="#191414")
+result_label = tk.Label(main, text="", font=("Arial", 12), fg="#1DB954", bg="#191414")
 result_label.pack(pady=10)
 
-root.mainloop()
+main.mainloop()
