@@ -54,7 +54,7 @@ title_label = tk.Label(main, text="File Organizer", font=("Arial", 18), fg="#1DB
 title_label.pack(pady=20)
 
 #Todo: Create and display the browse button
-browse_button = tk.Button(main, text="Select Directory", command=start_organization, fg="#1DB954", bg="#191414", font=("Arial", 12))
+browse_button = tk.Button(main, text="Select Folder", command=start_organization, fg="#1DB954", bg="#191414", font=("Arial", 12))
 browse_button.pack(pady=10)
 
 #Todo: Create and display the result label
