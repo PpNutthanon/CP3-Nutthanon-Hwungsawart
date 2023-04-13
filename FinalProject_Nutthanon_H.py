@@ -3,7 +3,6 @@ import os
 import shutil
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import ttk
 
 #Todo: Define file categories dictionary
 file_categories = {
