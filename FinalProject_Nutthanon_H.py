@@ -14,7 +14,8 @@ file_categories = {
     ".pdf" : "Documents",
     ".xlsx": "Excel",
     ".py"  : "Python",
-    ".doc" : "Microsoft Word",
+    ".docx": "Microsoft Word",
+    
 }
 
 #Todo: Function to organize files by moving them into categorized folders
@@ -47,7 +48,7 @@ def start_organization():
 
 main = tk.Tk()
 main.title("File Organizer")
-main.geometry("350x150")
+main.geometry("300x200")
 main.config(bg="#1DB954")
 
 #Todo: Create and display the title label
