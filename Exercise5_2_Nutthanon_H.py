@@ -1,6 +1,0 @@
-print("Program Calculate Velocity(km/h)")
-print("Note: The value you fill must be more than 1 !!!")
-print("-------------------------------------------------")
-s = float(input("Distance(km) : "))
-t = float(input("Time(h) : "))
-print(s/t,"km/h")
