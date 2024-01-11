@@ -27,7 +27,7 @@ emission_2021 = emission_score.iloc[9]
 print(emission_2021)
 
 #Choose Only Top ten in Most highest Emission Score
-df_esg_sorted = emission_2021.sort_values(ascending=False).head(11)
+esg_sorted = emission_2021.sort_values(ascending=False).head(11)
 
 
 '''
