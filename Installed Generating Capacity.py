@@ -1,15 +1,14 @@
 import pandas as pd
 import numpy as np
-from statsmodels.tsa.seasonal import seasonal_decompose
 import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.tsa.arima.model import ARIMA
 
 # Read the data
 df = pd.read_csv('Installed_Generating.csv')
 
 # Convert 'Year' to datetime and set as index
+df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
+df.dropna(subset=['Year'], inplace=True)  # Drop rows where 'Year' could not be converted
 df['Year'] = df['Year'].astype(int)
 df.set_index('Year', inplace=True)
 
@@ -23,11 +22,10 @@ df.dropna(subset=components, inplace=True)
 if df.empty:
     raise ValueError("The DataFrame is empty after removing NaN values.")
 
-#TODO: Generate a new index for the forecasted period
-Year = int(input("Enter the year you want to forecasting:"))
+# Generate a new index for the forecasted period based on user input
+forecast_years = int(input("Enter the number of years you want to forecast:"))
 last_year = df.index[-1]
-
-forecast_index = pd.RangeIndex(start=last_year+1, stop=last_year+Year+1, step=1)
+forecast_index = pd.RangeIndex(start=last_year + 1, stop=last_year + forecast_years + 1, step=1)
 
 # Define colors for each category and forecast lines
 colors = ['black', 'blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'orange']
@@ -37,29 +35,26 @@ forecast_colors = ['grey', 'lightblue', 'lightgreen', 'salmon', 'lightcyan', 'pi
 plt.figure(figsize=(14, 8))
 
 # Loop through each category to plot, fit ARIMA model, forecast, and plot forecast
-for i, column in enumerate(components):
+for i, component in enumerate(components):
     # Plot actual data
-    plt.plot(df.index, df[column], label=f'{column} Actual', color=colors[i], linewidth=2 if column == 'Total' else 1)
+    plt.plot(df.index, df[component], label=f'{component} Actual', color=colors[i], linewidth=2 if component == 'Total' else 1)
     
-    if column != 'Total':  # Forecasting for categories other than 'Total'
-        # Fit ARIMA model
-        model = ARIMA(df[column].dropna(), order=(1,1,1))  # Ensure to drop NaNs in each category
-        model_fit = model.fit()
-        # Forecast
-        forecast = model_fit.forecast(steps=Year)
-        # Plot forecasted data
-        plt.plot(forecast_index, forecast, linestyle='--', label=f'{column} Forecast', color=forecast_colors[i])
+    # Forecasting for all categories
+    model = ARIMA(df[component].dropna(), order=(1,1,1))  # Ensure to drop NaNs
+    model_fit = model.fit()
+    forecast = model_fit.forecast(steps=forecast_years)
+    plt.plot(forecast_index, forecast, linestyle='--', label=f'{component} Forecast', color=forecast_colors[i])
 
-# Special handling for 'Total' forecast to ensure it's plotted last
-model_total = ARIMA(df['Total'], order=(1,1,1))
-model_fit_total = model_total.fit()
-forecast_total = model_fit_total.forecast(steps=Year)  # Forecasting the next 5 periods
-plt.plot(forecast_index, forecast_total, 'r--', label='Total Forecasted', color='grey')
+# Set x-axis limits explicitly to include all years and forecasted period
+plt.xlim(df.index.min(), forecast_index.max())
+
+# Adding more ticks for clarity if needed
+plt.xticks(np.linspace(df.index.min(), forecast_index.max(), num=20, dtype=int), rotation=45)
 
 plt.title('Demand Forecasting Installed Generating Capacity by Time Series Method')
 plt.xlabel('Year')
 plt.ylabel('Installed Generating Capacity (MW)')
 plt.legend()
-plt.xticks(np.append(df.index.values, forecast_index), rotation=90)  # Ensure all x-ticks are shown
 plt.tight_layout()
+plt.grid(True)
 plt.show()
