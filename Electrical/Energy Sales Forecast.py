@@ -1,20 +1,17 @@
 import pandas as pd
 import numpy as np
-from statsmodels.tsa.seasonal import seasonal_decompose
 import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.tsa.arima.model import ARIMA
 
 # Read the data
-df = pd.read_csv('Resevior_Operation.csv')
+df = pd.read_csv('Electrical/Energy_Sales.csv')
 
 # Convert 'Year' to datetime and set as index
 df['Year'] = df['Year'].astype(int)
 df.set_index('Year', inplace=True)
 
 # Convert 'Total' and other components to numeric, coercing errors to NaN, then drop rows with NaNs
-components = ['Total water inflow']
+components = ['Total', 'MEA', 'PEA', 'EDL', 'Malaysia', 'Cambodia', 'Direct customers', 'Others']
 for component in components:
     df[component] = pd.to_numeric(df[component], errors='coerce')
 df.dropna(subset=components, inplace=True)
@@ -30,19 +27,20 @@ last_year = df.index[-1]
 forecast_index = pd.RangeIndex(start=last_year+1, stop=last_year+Year+1, step=1)
 
 # Define colors for each category and forecast lines
-colors = ['black']
-forecast_colors = ['lightblue']
+colors = ['black', 'blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'orange']
+forecast_colors = ['grey', 'lightblue', 'lightgreen', 'salmon', 'lightcyan', 'pink', 'lightyellow', 'peachpuff']
 
 # Plotting the actual and forecasted values for 'Total' and other components
 plt.figure(figsize=(14, 8))
-#TODO: plt.style.use('ggplot')
+
+plt.style.use("ggplot")
 
 # Loop through each category to plot, fit ARIMA model, forecast, and plot forecast
 for i, column in enumerate(components):
     # Plot actual data
-    plt.plot(df.index, df[column], label=f'{column} Actual', color=colors[i], linewidth=2 if column == 'Total water inflow' else 1)
+    plt.plot(df.index, df[column], label=f'{column} Actual', color=colors[i], linewidth=2 if column == 'Total' else 1)
     
-    if column != 'Total water inflow':  # Forecasting for categories other than 'Total'
+    if column != 'Total':  # Forecasting for categories other than 'Total'
         # Fit ARIMA model
         model = ARIMA(df[column].dropna(), order=(1,1,1))  # Ensure to drop NaNs in each category
         model_fit = model.fit()
@@ -52,14 +50,14 @@ for i, column in enumerate(components):
         plt.plot(forecast_index, forecast, linestyle='--', label=f'{column} Forecast', color=forecast_colors[i])
 
 # Special handling for 'Total' forecast to ensure it's plotted last
-model_total = ARIMA(df['Total water inflow'], order=(1,1,1))
+model_total = ARIMA(df['Total'], order=(1,1,10))
 model_fit_total = model_total.fit()
-forecast_total = model_fit_total.forecast(steps=Year)  # Forecasting the next 5 periods
+forecast_total = model_fit_total.forecast(steps=Year)  # Forecasting the next x periods
 plt.plot(forecast_index, forecast_total, 'r--', label='Total Forecasted', color='grey')
 
-plt.title('Demand Forecasting Total Water in Flow by Time Series Method')
+plt.title('Demand Forecasting Energy Sales by Time Series Method')
 plt.xlabel('Year')
-plt.ylabel('Water Inflow (Million Cubic Meter)')
+plt.ylabel('Energy Sales (Million kWh)')
 plt.legend()
 plt.xticks(np.append(df.index.values, forecast_index), rotation=90)  # Ensure all x-ticks are shown
 plt.tight_layout()

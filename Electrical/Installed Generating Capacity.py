@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
 
 # Read the data
-df = pd.read_csv('Installed_Generating.csv')
+df = pd.read_csv('Electrical/Installed_Generating.csv')
 
 # Convert 'Year' to datetime and set as index
 df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
@@ -40,7 +40,7 @@ for i, component in enumerate(components):
     plt.plot(df.index, df[component], label=f'{component} Actual', color=colors[i], linewidth=2 if component == 'Total' else 1)
     
     # Forecasting for all categories
-    model = ARIMA(df[component].dropna(), order=(1,1,1))  # Ensure to drop NaNs
+    model = ARIMA(df[component].dropna(), order=(1,1,10))  # Ensure to drop NaNs
     model_fit = model.fit()
     forecast = model_fit.forecast(steps=forecast_years)
     plt.plot(forecast_index, forecast, linestyle='--', label=f'{component} Forecast', color=forecast_colors[i])
